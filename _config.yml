@@ -1,0 +1,12 @@
+# Site settings
+title: Steve Barman/beautiful beast
+email: steve@stevebarman.com
+description: > # this means to ignore newlines until "baseurl:"
+  Steve Barman is a web developer, writer, and podcaster. He is not Batman. 
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://stevebarman.com" # the base hostname & protocol for your site
+twitter_username: seafoam6
+github_username:  seafoam6
+
+# Build settings
+markdown: kramdown
