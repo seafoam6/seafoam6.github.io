@@ -2,7 +2,7 @@
 layout: post
 title:  "ADD"
 date:   2015-05-30 19:15:51
-categories: programming, childhood
+categories: webdev
 ---
 
 Growing up I spent most of my life in a peculiar position. I sat through school completely uninvolved because I couldn't be bothered. I understood everything, everything just went at a pace that put me to sleep. Teachers would call on me, to try to bring me back to earth. I'd answer the question, correctly, then continue to space out. I spent a year in "primary first grade" for kids who were above kindergarten, not ready for first grade. I scored in the 99th percentile in all my elementary school tests, but couldn't maintain any sort of focus.

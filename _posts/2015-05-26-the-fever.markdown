@@ -2,7 +2,7 @@
 layout: post
 title:  "Hey blog things"
 date:   2015-05-26 19:15:51
-categories: The Fever
+categories: movies
 ---
 
 show me the fever<br>
