@@ -44,12 +44,13 @@ as you can see the scanner doesn't actual update the model. On the first actual 
 
 #### Solution
 
-It took me a while to figure out because I was so focused on passing the model into the controller on submit. My fix was to call this on submit
+It took me a while to figure out because I was so focused on passing the model into the controller on submit. My fix was check the value of the input AFTER the form was submitted. There's no 'real' submitting in javascript anyway, right? 
 
 ```
 var scannerField =  angular.element(document.getElementById('scannerField')).val();
 ```
-I then pass around scannerField to any service or model that might need it. Neat-o.
+
+after submission I then pass around scannerField to any service or model that might need it. Neat-o.
 
 
 
