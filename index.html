@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Steve Barman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Writer of movie scripts and javaScripts">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Steve Barman">
+<meta property="og:url" content="http://stevebarman.com/index.html">
+<meta property="og:site_name" content="Steve Barman">
+<meta property="og:description" content="Writer of movie scripts and javaScripts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Steve Barman">
+<meta name="twitter:description" content="Writer of movie scripts and javaScripts">
+  
+    <link rel="alternative" href="/atom.xml" title="Steve Barman" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Steve Barman</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://stevebarman.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2015-08-11-working-with-scanner" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/11/2015-08-11-working-with-scanner/" class="article-date">
+  <time datetime="2015-08-11T22:15:51.000Z" itemprop="datePublished">2015-08-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/angularjs-programming/">angularjs programming</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/11/2015-08-11-working-with-scanner/">Working with Scanner devices and angularjs</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Recently my work has had me working in a unique, or at least, <a href="https://github.com/swipetrack-solutions/swipetrack-browser-api" target="_blank" rel="external">underdocumented</a> set of hardware and software. I’ve never done any developer blogging, but I want to try to pay it forward for all the blogs that have helped me in the past. </p>
+<p>I recently wrote an angular front end for a large scary <a href="http://www.microsoft.com/en-us/dynamics/default.aspx" target="_blank" rel="external">Microsoft Dynamics</a> application. The point of contact for the application to be consumed was a 2014 ipod touch placed in a Captuvo sled. If you’re not familiar with captuvo sleds they turn your ipod or iphone into a hand held scanner. Rather than use the ipod on screen keyboard, you hold a button, it scans using the ipod camera and a little grocery store style laser. The value that is scanned is immediately entered into the field. </p>
+<p>The Captuvo sled saves you the time of punching in all those tiny keys with your fat fingers. But you still need to press the ‘enter’ key, as well as navigate around the page. Luckily there is an application, that is a complete heaven send, the <a href="http://www.swipetrack.com/swipetrack-browser/" target="_blank" rel="external">SwipeTrack Browser</a>. SwipeTrack browser is a handy wrapper that wraps the default browser and adds a few functions via the API. I REALLY WISH they documented more features. But here are the important ones:</p>
+<ul>
+<li>You can trigger a device sound. There are 3. Alert, error, and success. Unfortunately you cannot just load your own sounds. Which makes zero sense to me. </li>
+<li>On the iphone you can trigger a vibration and set the duration of the vibration. This kind of feedback is super useful (ipods do not have a vibration mode).</li>
+<li>You can trigger custom delimeter after the scan, such as: space, tab, return, submit. I’ve found on things like ‘return’ and ‘submit’ mileage varies depending on the implementation of your app. Our ASP.NET application behaved differently than our Angular app.</li>
+<li><em>you can call javascript functions after a scan</em>. YES YES YES YES YES. This is so great. It opens up a world of possibilities.</li>
+</ul>
+<p>I’ve built two applications using this devices/software combination. For the simplist interoperability between scanners and applications, I simply have each scanner calling scan() . I define scan() differently in each app, and really you don’t want to have to type in a ton of javascript in to a scanner using your fat fingers. </p>
+<p>Having access to call one function and use jquery allows you to find out which input field you’re in, pass the value to your javascript, focus() the next field and so on. You can reduce the amount of keypad touches drastically. </p>
+<p>I use this helpful block to trigger sounds throughout my app </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">soundSucces</span>(<span class="params"></span>) </span>&#123;<span class="built_in">window</span>.location = <span class="string">"stBrowser://playSound?sound=success"</span>;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">soundAttention</span>(<span class="params"></span>) </span>&#123; <span class="built_in">window</span>.location = <span class="string">"stBrowser://playSound?sound=attention"</span>;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">soundError</span>(<span class="params"></span>) </span>&#123; <span class="built_in">window</span>.location = <span class="string">"stBrowser://playSound?sound=error"</span>;&#125;</span><br></pre></td></tr></table></figure>
+<p>I wish you could here the soundError() it sounds like a sad robot. The use of window.location is how swipeTrack has chosen to trigger sounds. Interesting, eh?</p>
+<h2 id="Capturing_values_from_input_fields">Capturing values from input fields</h2><p>I’m going to show how I solved a bug that we encountered testing the scanners. This was for an Angular 1.4 application, and I encourage anyone with a better solution to post it in the comments. </p>
+<h4 id="The_problem">The problem</h4><p></p><p data-height="268" data-theme-id="0" data-slug-hash="rVRggj" data-default-tab="result" data-user="dreamtroit" class="codepen">See the Pen <a href="http://codepen.io/dreamtroit/pen/rVRggj/" target="_blank" rel="external">Updating input values with jquery and angular</a> by Steve Barman (<a href="http://codepen.io/dreamtroit" target="_blank" rel="external">@dreamtroit</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>as you can see the scanner doesn’t actual update the model. On the first actual keystroke, Angular will update the model. When I submitted the form I would submit <strong>undefined</strong> as the value of the input field. </p>
+<h4 id="Solution">Solution</h4><p>It took me a while to figure out because I was so focused on passing the model into the controller on submit. My fix was check the value of the input AFTER the form was submitted. There’s no ‘real’ submitting in javascript anyway, right? </p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scannerField =  angular.element(<span class="built_in">document</span>.getElementById(<span class="string">'scannerField'</span>)).val();</span><br></pre></td></tr></table></figure>
+<p>after submission I then pass around scannerField to any service or model that might need it. Neat-o.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://stevebarman.com/2015/08/11/2015-08-11-working-with-scanner/" data-id="cigr03hwp0000ieuo0g8s30oh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-07-06-terminator-genisys" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/07/06/2015-07-06-terminator-genisys/" class="article-date">
+  <time datetime="2015-07-06T23:15:51.000Z" itemprop="datePublished">2015-07-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/movies/">movies</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/06/2015-07-06-terminator-genisys/">Terminator Genisys</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>There’s probably going to be spoilers in here. This is a combination of a review mixed with my general thoughts. I’m not a film critic. If that’s what you’re looking for, I suggest you check out <a href="http://blogs.indiewire.com/leonardmaltin/" target="_blank" rel="external">Leonard Maltin</a></em></p>
+<p>Terminator Genisys was interesting. It takes this weird position that Terminator 3 and 4 never happened. I doubt however that hardcore Terminator fans could actually tell you what that difference means for the continuity. Genisys says to continuity: <em>shrug</em>. The characters mention in the outtro monologue that they themselves haven’t figured all of it out yet. Echos the MST3k sentiment of </p>
+<blockquote>
+<p>“if you’re wondering how Joel eats and breaths, and other science facts, repeat to yourself it’s just a show, you should really just relax”</p>
+</blockquote>
+<p>I’m sure that won’t quell angry fan boys. But really Terminator Genisys is really fun at parts, and at parts stands equal to T2. Those points I feel is when it’s most heavily impersonating T2. </p>
+<p>There’s 4 different times in the film 1984, 1997, 2017. Each year has a different color filter. 1984 matches the first Terminator film. 1997, T2. 2017: Instagram. In the future, as well as the present all films are shot in instagram. </p>
+<p>In 1991 when James Cameron made Terminator 2, heavy color filtering was still a new thing and directors could still use it tastefully. For horrible examples, see Terminator 4 and that pile of shit Ferngully knock-off Avatar. In Genisys, it’s not totally offensive but it works. </p>
+<p>There’s a genuine feeling as they go through this film that they’re trying to expand the storyline to expand past what they’ve done with the previous films. Rather than just non-stop John Connor getting hunted, they’ll revisit the first Terminator and show it from a different perspective, those new perspectives echo into results in the future. That’s neat. </p>
+<p>Terminator 3 felt like a $2 version of terminator. T3’s “more advanced” terminators were weaker, goofier, and cheaper seeming than the liquid metal T-1000s. T3 in a nutshell was “there’s the terminator, run!” “oh shit, there she is again, run!” (rinse repeat). Genisys at least made the tech more terrifying and kept some level of cohesion and budget with the first two movies. </p>
+<p>There was a couple of points in the film when Emilia Clarke was doing a Linda Hamilton impression, which was cool. But Linda Hamilton in T2 was a buff brute and Emilia Clarke looks like a cuddler. Her arms have no muscle, which I’m sure might have looked bad on her in game of thrones, but couldn’t the CGI department give her some bicepts? She’s been preparing for the apocolypse since she was 9 years old and has done less push ups that she does in the mental institution in T2. </p>
+<p>There’s a scene where they go into this secret weapons cache that has been there for 20 years that Pops set up for them. First thing they have to do? Start putting bullets in magazines. There was a fucking terminator hanging out for 20 years and he couldn’t get these fucking bullets in clips? What the fuck, talk about waiting until the last minute. </p>
+<p>Skynet, you don’t have to mimic human form and talk to people while they’re trying to kill you. Why not do something to try to kill your enemies instead of wasting the CPU cycles to appear to grow older. There was a point in that same sequence where Sarah Connor and Reese are like “oh no, we’ve got 4 minutes left!” - I totally thought they were going to start banging to make John Connor. Sadly, it didn’t happen. </p>
+<p>The movie was decent but flawed, I hope they make the 2 sequels that have been outlined because I’ll throw another $10 at the franchise.  </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://stevebarman.com/2015/07/06/2015-07-06-terminator-genisys/" data-id="cigr03i4j0003ieuo5hra9iae" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-06-01-add" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/30/2015-06-01-add/" class="article-date">
+  <time datetime="2015-05-30T23:15:51.000Z" itemprop="datePublished">2015-05-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/webdev/">webdev</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/30/2015-06-01-add/">ADD</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Growing up I spent most of my life in a peculiar position. I sat through school completely uninvolved because I couldn’t be bothered. I understood everything, everything just went at a pace that put me to sleep. Teachers would call on me, to try to bring me back to earth. I’d answer the question, correctly, then continue to space out. I spent a year in “primary first grade” for kids who were above kindergarten, not ready for first grade. I scored in the 99th percentile in all my elementary school tests, but couldn’t maintain any sort of focus.</p>
+<p>I remember an assignment in primary first grade. We had to draw something we did on vacation, then present in front of the class. I must have phased out, I do that a lot. I drew something I wanted to do on vacation, fly to the moon in a spaceship. When I saw the other children present I was terrified. Utterly fucking terrified. I should have said “I watched the moon landing on tv”, or “I was confused about the assignment”. Instead of the rational options, I feigned sickness - extreme foot pain, to get out of class. My mom actually took me to the doctor for my fake foot pain. The doctor, could not cure my illness. There wasn’t yet a name for what I had.</p>
+<p>As an engaged, teen with a sponge like brain, I listened to a lot of talk radio, and pretended like I read the news. I learned about Attention Deficit Disorder. At that time ADD wasn’t yet synonymous with Attention Deficit Hyperactive Disorder. I have ADD, not ADHD. I was never more hyperactive than any other child who loved coca-cola and <a href="http://www.collectingcandy.com/wordpress/?p=3517" target="_blank" rel="external">Fun Dip</a>. I insisted that I be taken to the doctor to be diagnosed. The doctor, to his credit, wasn’t in favor of pumping me full of speed and sending me into the world like everyone else. But I convinced him. He started me at 4mg dose of ritilin, the maximum suggested amount. </p>
+<p>At school I noticed everything. I was hyper aware. I watched the school clock tick by in slow motion. I burned through churned through my readings and my assignments. My mouth was dryer than a desert no matter how much water I drank. I wasn’t hungry at lunch, which is weird for a chubby kid. I felt completely dead inside. Sad movies couldn’t trigger a tear. I felt like I could watch a bus load of puppies explode and not care. In an English class our assigned reading was “Catcher in the Rye”. I read the first 2 chapters. I was depressed. Horribly depressed. I was smart enough to know that Catcher in the Rye is what multiple gunman had on their person when apprehended. I knew the book was was a gasoline to the flame of frustration with the world. I felt that if I read the book I might be so depressed I took my own life. So I read the cliffs Notes. I got a C. </p>
+<p>I quit using Ritilin 2 weeks in. Feeling like a self-destructive robot is no way to go through adolescence. I don’t know if taking a lower dose would have helped me. I’m kind of glad the doctor scared me out of pharmaceuticals by giving me what I wanted. Later in life I met a guy who was in the test group for ritilin. He had a very visible set of facial tics that went off every three or four seconds. </p>
+<p>In college I used deadlines to keep me focused, which was good in essays I could b-s (film papers), and horrible for things like statistics, and history papers. Reading and retention classes I did well in. I am the king of the multiple-choice quiz. Large assignments requiring self motivation was like herding cats (but to my own credit, I did well in nearly every class). The college stress made me realize that my ADD was just part of me. I didn’t want to use it as a crutch like some kids did, and I didn’t want to TRY to use it to my advantage, by procrastinating. </p>
+<p>I had to use my body and mind as an instrument and tune it according to the tasks at hand. I found that repetitive daily activities made more aware of what I was doing. Doing the same things, at the same time of day, in the same order. Writing lists was very helpful, keeping it in my back pocket I could find the tasks that i had to complete by the end of the day (this was later replaced by phone apps). I found I could stay focused reading books if I actively tried to speed read them (I run a bookmark down the page and have my eyes dart directly behind it). When I’m in the zone, I will run at a task until I’m exhausted, and as long as I return back to it, I can actually get the damn thing done. </p>
+<p>I still have ADD. I self-medicate with meditative exercises and coffee. I should probably find some herbal supliment to help out naturally. My work in front end design isn’t hindered terribly much by the ADD (most of the time). I feel like bouncing between markup, scss, and javascript is kind of helped by my ADD. I can usually have bad 80s movies on when I work at home without any adverse effects. If I can’t focus, I’ll take a minute walk, get a drink of water meditate for a minute and go back into the zone. So much of programming is type a line, save, make sure it worked, adjust, in an infinite short burst cycle. </p>
+<p>The conspiracy theorist in me thinks there’s some ingredient in white bread that our pregnant mom’s ate too much of that gave my generation ADD/ADHD, or something like that. Or perhaps it was just watching hours and hours of Nickelodeon/MTV/and <a href="https://twitter.com/rickilake" target="_blank" rel="external">Ricki Lake</a> as a kid. Regardless of the cause, rather than drugging all the kids, I’d rather unchain them from their desks and let them learn through play. Let their attentionless minds discover by asking questions, until they find a topic they really want to focus on. </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://stevebarman.com/2015/05/30/2015-06-01-add/" data-id="cigr03i4m0006ieuo65wz9yay" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angularjs-programming/">angularjs programming</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/movies/">movies</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/webdev/">webdev</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/08/11/2015-08-11-working-with-scanner/">Working with Scanner devices and angularjs</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/06/2015-07-06-terminator-genisys/">Terminator Genisys</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/30/2015-06-01-add/">ADD</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Steve Barman<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
